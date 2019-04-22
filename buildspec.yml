@@ -1,0 +1,18 @@
+version: 0.1
+phases:
+  pre_build:
+    commands:
+      - echo Downloading NPM dependencies
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build     # this is your build command
+  post_build:
+    commands:
+      # assuming your built content is in the /dist folder
+      - aws s3 cp --recursive --acl public-read ./dist s3://<your-s3-bucket>
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
